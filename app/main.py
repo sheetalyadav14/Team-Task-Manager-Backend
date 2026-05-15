@@ -26,11 +26,13 @@ def create_app() -> FastAPI:
         version="1.0.0",
         lifespan=lifespan,
     )
-    configured_origins = [origin.strip() for origin in settings.client_origin.split(",") if origin.strip()]
+    configured_origins = [
+        origin.strip() for origin in settings.client_origin.split(",") if origin.strip()
+    ]
     app.add_middleware(
         CORSMiddleware,
         allow_origins=configured_origins,
-        allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
+        allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$|^https://[a-zA-Z0-9-]+\.(onrender\.com|netlify\.app|vercel\.app)$",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
